@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
-<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.databrew.cafe.controller.InventoryController">
+<?import javafx.scene.layout.*?>
+<BorderPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml" fx:controller="com.databrew.cafe.controller.InventoryController">
   <center>
-    <VBox spacing="8" padding="12">
+    <VBox spacing="8">
+      <padding>
+        <Insets top="12" right="12" bottom="12" left="12" />
+      </padding>
       <Label text="Inventory" styleClass="section-title" />
       <TableView fx:id="inventoryTable">
         <columns>

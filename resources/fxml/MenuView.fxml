@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
-<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.databrew.cafe.controller.MenuController">
+<?import javafx.scene.layout.*?>
+<BorderPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml" fx:controller="com.databrew.cafe.controller.MenuController">
   <top>
-    <HBox spacing="8" padding="10">
+    <HBox spacing="8">
+      <padding>
+        <Insets top="10" right="10" bottom="10" left="10" />
+      </padding>
       <Button text="Add" onAction="#onAdd" styleClass="primary-btn" />
       <Button text="Edit" onAction="#onEdit" />
       <Button text="Delete" onAction="#onDelete" />

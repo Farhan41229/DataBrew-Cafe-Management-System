@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.scene.Node;
@@ -14,6 +15,9 @@ public class DashboardController {
 
     @FXML
     private BorderPane mainLayout;
+
+    @FXML
+    private Button fullscreenButton;
 
     @FXML
     private void handleGoToPOS(ActionEvent event) {
@@ -33,6 +37,22 @@ public class DashboardController {
     @FXML
     private void handleGoToInventory(ActionEvent event) {
         loadView("InventoryView.fxml");
+    }
+
+    @FXML
+    private void handleMinimize(ActionEvent event) {
+        Stage stage = (Stage) mainLayout.getScene().getWindow();
+        stage.setIconified(true);
+    }
+
+    @FXML
+    private void handleFullscreen(ActionEvent event) {
+        Stage stage = (Stage) mainLayout.getScene().getWindow();
+        boolean goingFullScreen = !stage.isFullScreen();
+        stage.setFullScreen(goingFullScreen);
+        if (fullscreenButton != null) {
+            fullscreenButton.setText(goingFullScreen ? "Exit Fullscreen" : "Fullscreen");
+        }
     }
 
     @FXML

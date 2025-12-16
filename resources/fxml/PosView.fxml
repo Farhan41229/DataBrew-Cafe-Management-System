@@ -1,17 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.control.*?>
 <?import javafx.collections.FXCollections?>
-<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.databrew.cafe.controller.PosController">
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<BorderPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml" fx:controller="com.databrew.cafe.controller.PosController">
   <left>
-    <VBox spacing="8" padding="12">
+    <VBox spacing="8">
+      <padding>
+        <Insets top="12" right="12" bottom="12" left="12" />
+      </padding>
       <Label text="Menu" styleClass="section-title" />
       <ListView fx:id="menuList" />
       <Button text="Add to Cart" onAction="#onAdd" />
     </VBox>
   </left>
   <center>
-    <VBox spacing="8" padding="12">
+    <VBox spacing="8">
+      <padding>
+        <Insets top="12" right="12" bottom="12" left="12" />
+      </padding>
       <Label text="Cart" styleClass="section-title" />
       <TableView fx:id="cartTable">
         <columns>

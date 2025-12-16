@@ -17,7 +17,10 @@ public class App extends Application {
         Scene scene = new Scene(loader.load());
         scene.getStylesheets().add(getClass().getResource("/css/theme.css").toExternalForm());
         stage.setTitle("DataBrew Cafe");
+        stage.setMinWidth(900);
+        stage.setMinHeight(650);
         stage.setScene(scene);
+        stage.setMaximized(true);
         stage.show();
     }
 

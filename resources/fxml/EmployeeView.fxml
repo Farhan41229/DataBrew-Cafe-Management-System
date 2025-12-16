@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
-<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.databrew.cafe.controller.EmployeeController">
+<?import javafx.scene.layout.*?>
+<BorderPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml" fx:controller="com.databrew.cafe.controller.EmployeeController">
   <left>
-    <VBox spacing="6" padding="10">
+    <VBox spacing="6">
+      <padding>
+        <Insets top="10" right="10" bottom="10" left="10" />
+      </padding>
       <Label text="Employees" styleClass="section-title" />
       <ListView fx:id="employeeList" prefWidth="160" />
     </VBox>
@@ -14,7 +18,10 @@
         <Tab text="Details">
           <AnchorPane>
             <children>
-              <GridPane hgap="10" vgap="10" padding="12" AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.bottomAnchor="0">
+              <GridPane hgap="10" vgap="10" AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.bottomAnchor="0">
+                <padding>
+                  <Insets top="12" right="12" bottom="12" left="12" />
+                </padding>
                 <Label text="Position" GridPane.rowIndex="0" GridPane.columnIndex="0" />
                 <TextField fx:id="positionField" GridPane.rowIndex="0" GridPane.columnIndex="1" />
                 <Label text="Hire Date" GridPane.rowIndex="1" GridPane.columnIndex="0" />
@@ -29,7 +36,10 @@
           </AnchorPane>
         </Tab>
         <Tab text="Shifts">
-          <VBox spacing="8" padding="12">
+          <VBox spacing="8">
+            <padding>
+              <Insets top="12" right="12" bottom="12" left="12" />
+            </padding>
             <HBox spacing="8">
               <ComboBox fx:id="shiftBox" promptText="Select shift" />
               <DatePicker fx:id="shiftDatePicker" />
@@ -45,7 +55,10 @@
           </VBox>
         </Tab>
         <Tab text="Accounts">
-          <VBox spacing="8" padding="12">
+          <VBox spacing="8">
+            <padding>
+              <Insets top="12" right="12" bottom="12" left="12" />
+            </padding>
             <TableView fx:id="employeeTable">
               <columns>
                 <TableColumn fx:id="colId" text="ID" prefWidth="80" />
