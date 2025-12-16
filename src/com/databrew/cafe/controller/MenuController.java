@@ -4,96 +4,184 @@ import com.databrew.cafe.dao.CategoryDao;
 import com.databrew.cafe.dao.MenuDao;
 import com.databrew.cafe.model.Category;
 import com.databrew.cafe.model.MenuItem;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleLongProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.util.StringConverter;
 
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class MenuController {
     @FXML
     private TableView<MenuItem> menuTable;
     @FXML
-    private TableColumn<MenuItem, String> nameCol;
+    private TableColumn<MenuItem, Number> colId;
     @FXML
-    private TableColumn<MenuItem, Number> priceCol;
+    private TableColumn<MenuItem, String> colName;
     @FXML
-    private TableColumn<MenuItem, String> categoryCol;
+    private TableColumn<MenuItem, String> colCategory;
     @FXML
-    private TableColumn<MenuItem, Boolean> statusCol;
+    private TableColumn<MenuItem, Number> colPrice;
+    @FXML
+    private TableColumn<MenuItem, String> colStatus;
+
+    @FXML
+    private TextField searchField;
+    @FXML
+    private TextField itemNameField;
+    @FXML
+    private TextField priceField;
+    @FXML
+    private ComboBox<Category> categoryCombo;
+    @FXML
+    private ComboBox<String> statusCombo;
+    @FXML
+    private ImageView itemImageView;
 
     private final MenuDao menuDao = new MenuDao();
     private final CategoryDao categoryDao = new CategoryDao();
     private ObservableList<MenuItem> items = FXCollections.observableArrayList();
+    private ObservableList<MenuItem> filtered = FXCollections.observableArrayList();
     private List<Category> categories;
+
+    private MenuItem editingSelection;
 
     @FXML
     public void initialize() {
-        nameCol.setCellValueFactory(c -> new javafx.beans.property.SimpleStringProperty(c.getValue().getName()));
-        priceCol.setCellValueFactory(c -> new javafx.beans.property.SimpleDoubleProperty(c.getValue().getPrice()));
-        categoryCol.setCellValueFactory(
-                c -> new javafx.beans.property.SimpleStringProperty(resolveCategoryName(c.getValue().getCategoryId())));
-        statusCol.setCellValueFactory(c -> new javafx.beans.property.SimpleBooleanProperty(c.getValue().isActive()));
-        statusCol.setCellFactory(col -> new TableCell<>() {
-            @Override
-            protected void updateItem(Boolean active, boolean empty) {
-                super.updateItem(active, empty);
-                if (empty || active == null) {
-                    setText(null);
-                } else {
-                    setText(active ? "Active" : "Hidden");
-                }
-            }
-        });
-        refresh();
+        wireTable();
+        wireStatusCombo();
+        setupSearch();
+        loadData();
+        menuTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSel, newSel) -> populateForm(newSel));
     }
 
-    private void refresh() {
+    private void wireTable() {
+        colId.setCellValueFactory(c -> new SimpleLongProperty(c.getValue().getId()));
+        colName.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getName()));
+        colCategory
+                .setCellValueFactory(c -> new SimpleStringProperty(resolveCategoryName(c.getValue().getCategoryId())));
+        colPrice.setCellValueFactory(c -> new SimpleDoubleProperty(c.getValue().getPrice()));
+        colStatus
+                .setCellValueFactory(c -> new SimpleStringProperty(c.getValue().isActive() ? "Available" : "Sold Out"));
+        menuTable.setItems(filtered);
+        menuTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+    }
+
+    private void wireStatusCombo() {
+        statusCombo.setItems(FXCollections.observableArrayList("Available", "Sold Out"));
+        statusCombo.getSelectionModel().selectFirst();
+    }
+
+    private void setupSearch() {
+        searchField.textProperty().addListener((obs, ov, nv) -> applyFilter(nv));
+    }
+
+    private void applyFilter(String term) {
+        String q = term == null ? "" : term.trim().toLowerCase();
+        if (q.isEmpty()) {
+            filtered.setAll(items);
+            return;
+        }
+        filtered.setAll(items.stream()
+                .filter(i -> i.getName().toLowerCase().contains(q) ||
+                        resolveCategoryName(i.getCategoryId()).toLowerCase().contains(q))
+                .collect(Collectors.toList()));
+    }
+
+    private void loadData() {
         try {
             categories = categoryDao.findAll();
+            if (categoryCombo != null) {
+                categoryCombo.setItems(FXCollections.observableArrayList(categories));
+                categoryCombo.setConverter(new StringConverter<>() {
+                    @Override
+                    public String toString(Category c) {
+                        return c == null ? "" : c.getName();
+                    }
+
+                    @Override
+                    public Category fromString(String s) {
+                        return null;
+                    }
+                });
+                categoryCombo.setCellFactory(list -> new ListCell<>() {
+                    @Override
+                    protected void updateItem(Category item, boolean empty) {
+                        super.updateItem(item, empty);
+                        setText(empty || item == null ? null : item.getName());
+                    }
+                });
+                if (!categories.isEmpty()) {
+                    categoryCombo.getSelectionModel().selectFirst();
+                }
+            }
             items = FXCollections.observableArrayList(menuDao.findAll());
-            menuTable.setItems(items);
-            menuTable.refresh();
+            filtered.setAll(items);
         } catch (SQLException e) {
             showError("Failed to load menu: " + e.getMessage());
         }
     }
 
     @FXML
-    private void onAdd() {
-        MenuItem created = showEditDialog(null);
-        if (created != null) {
-            try {
-                menuDao.insert(created);
-                refresh();
-            } catch (SQLException e) {
-                showError("Create failed: " + e.getMessage());
-            }
+    private void handleRefresh() {
+        loadData();
+        applyFilter(searchField.getText());
+    }
+
+    @FXML
+    private void handleClearForm() {
+        editingSelection = null;
+        itemNameField.clear();
+        priceField.clear();
+        if (categoryCombo != null && !categoryCombo.getItems().isEmpty()) {
+            categoryCombo.getSelectionModel().selectFirst();
+        }
+        if (statusCombo != null) {
+            statusCombo.getSelectionModel().selectFirst();
         }
     }
 
     @FXML
-    private void onEdit() {
-        MenuItem selected = menuTable.getSelectionModel().getSelectedItem();
-        if (selected == null)
-            return;
-        MenuItem updated = showEditDialog(selected);
-        if (updated != null) {
-            try {
-                menuDao.update(updated);
-                refresh();
-            } catch (SQLException e) {
-                showError("Update failed: " + e.getMessage());
+    private void handleSave() {
+        try {
+            MenuItem toSave = (editingSelection == null) ? new MenuItem() : editingSelection;
+            toSave.setName(itemNameField.getText());
+            toSave.setPrice(Double.parseDouble(priceField.getText()));
+            Category selectedCat = categoryCombo.getSelectionModel().getSelectedItem();
+            if (selectedCat == null) {
+                showError("Please select a category");
+                return;
             }
+            toSave.setCategoryId(selectedCat.getId());
+            String status = statusCombo.getSelectionModel().getSelectedItem();
+            toSave.setActive(!"Sold Out".equalsIgnoreCase(status));
+
+            if (toSave.getId() == 0) {
+                menuDao.insert(toSave);
+            } else {
+                menuDao.update(toSave);
+            }
+            handleRefresh();
+            handleClearForm();
+        } catch (NumberFormatException ex) {
+            showError("Price must be numeric");
+        } catch (SQLException e) {
+            showError("Save failed: " + e.getMessage());
         }
     }
 
     @FXML
-    private void onDelete() {
+    private void handleDelete() {
         MenuItem selected = menuTable.getSelectionModel().getSelectedItem();
         if (selected == null)
             return;
@@ -103,81 +191,48 @@ public class MenuController {
         if (result.isPresent() && result.get() == ButtonType.OK) {
             try {
                 menuDao.delete(selected.getId());
-                refresh();
+                handleRefresh();
             } catch (SQLException e) {
-                showError("Delete failed: " + e.getMessage());
+                // If FK constraint prevents delete, fall back to marking inactive.
+                String msg = e.getMessage() == null ? "" : e.getMessage().toLowerCase();
+                if (msg.contains("foreign") || msg.contains("parent") || msg.contains("constraint")) {
+                    try {
+                        selected.setActive(false);
+                        menuDao.update(selected);
+                        handleRefresh();
+                        showError("Item in use; marked as inactive instead of delete.");
+                    } catch (SQLException ex) {
+                        showError("Delete failed: " + ex.getMessage());
+                    }
+                } else {
+                    showError("Delete failed: " + e.getMessage());
+                }
             }
         }
     }
 
-    private MenuItem showEditDialog(MenuItem existing) {
-        Dialog<MenuItem> dialog = new Dialog<>();
-        dialog.setTitle(existing == null ? "Add Menu Item" : "Edit Menu Item");
-        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+    @FXML
+    private void handleChangeImage() {
+        // Placeholder: wire image picker later. For now we just keep the view
+        // consistent.
+    }
 
-        TextField nameField = new TextField();
-        TextField priceField = new TextField();
-        TextField imageField = new TextField();
-        ComboBox<Category> categoryBox = new ComboBox<>(FXCollections.observableArrayList(categories));
-        categoryBox.setConverter(new javafx.util.StringConverter<>() {
-            @Override
-            public String toString(Category c) {
-                return c == null ? "" : c.getName();
-            }
-
-            @Override
-            public Category fromString(String s) {
-                return null;
-            }
-        });
-        CheckBox activeBox = new CheckBox("Active");
-
-        if (existing != null) {
-            nameField.setText(existing.getName());
-            priceField.setText(String.valueOf(existing.getPrice()));
-            imageField.setText(existing.getDescription());
-            activeBox.setSelected(existing.isActive());
-            categoryBox.getSelectionModel().select(categories.stream()
-                    .filter(c -> c.getId() == existing.getCategoryId())
-                    .findFirst().orElse(null));
-        } else {
-            activeBox.setSelected(true);
-            if (!categories.isEmpty())
-                categoryBox.getSelectionModel().selectFirst();
+    private void populateForm(MenuItem item) {
+        editingSelection = item;
+        if (item == null) {
+            handleClearForm();
+            return;
         }
-
-        GridPane grid = new GridPane();
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.addRow(0, new Label("Name"), nameField);
-        grid.addRow(1, new Label("Price"), priceField);
-        grid.addRow(2, new Label("Category"), categoryBox);
-        grid.addRow(3, new Label("Image Path"), imageField);
-        grid.addRow(4, new Label("Status"), activeBox);
-        dialog.getDialogPane().setContent(grid);
-
-        dialog.setResultConverter(btn -> {
-            if (btn != ButtonType.OK)
-                return null;
-            try {
-                double price = Double.parseDouble(priceField.getText());
-                if (categoryBox.getValue() == null)
-                    return null;
-                MenuItem item = existing == null ? new MenuItem() : existing;
-                item.setName(nameField.getText());
-                item.setPrice(price);
-                item.setCategoryId(categoryBox.getValue().getId());
-                item.setDescription(imageField.getText());
-                item.setActive(activeBox.isSelected());
-                return item;
-            } catch (NumberFormatException ex) {
-                showError("Price must be numeric");
-                return null;
-            }
-        });
-
-        Optional<MenuItem> result = dialog.showAndWait();
-        return result.orElse(null);
+        itemNameField.setText(item.getName());
+        priceField.setText(String.valueOf(item.getPrice()));
+        if (categoryCombo != null && categories != null) {
+            Category match = categories.stream()
+                    .filter(c -> c.getId() == item.getCategoryId())
+                    .findFirst()
+                    .orElse(null);
+            categoryCombo.getSelectionModel().select(match);
+        }
+        statusCombo.getSelectionModel().select(item.isActive() ? "Available" : "Sold Out");
     }
 
     private String resolveCategoryName(long categoryId) {

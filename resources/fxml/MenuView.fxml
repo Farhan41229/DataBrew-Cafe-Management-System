@@ -1,26 +1,112 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
-<BorderPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml" fx:controller="com.databrew.cafe.controller.MenuController">
-  <top>
-    <HBox spacing="8">
-      <padding>
-        <Insets top="10" right="10" bottom="10" left="10" />
-      </padding>
-      <Button text="Add" onAction="#onAdd" styleClass="primary-btn" />
-      <Button text="Edit" onAction="#onEdit" />
-      <Button text="Delete" onAction="#onDelete" />
-    </HBox>
-  </top>
-  <center>
-    <TableView fx:id="menuTable">
-      <columns>
-        <TableColumn fx:id="nameCol" text="Name" prefWidth="160" />
-        <TableColumn fx:id="priceCol" text="Price" prefWidth="80" />
-        <TableColumn fx:id="categoryCol" text="Category" prefWidth="140" />
-        <TableColumn fx:id="statusCol" text="Status" prefWidth="100" />
-      </columns>
-    </TableView>
-  </center>
+
+<BorderPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.databrew.cafe.controller.MenuController">
+    <!-- Header -->
+    <top>
+        <HBox spacing="12" style="-fx-border-color: #e5e7eb; -fx-border-width: 0 0 1 0;">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20" />
+            </padding>
+            <Label text="Menu Management"
+                   style="-fx-font-size: 26px; -fx-font-weight: 900; -fx-text-fill: #0f172a;" />
+            <Region HBox.hgrow="ALWAYS" />
+            <HBox spacing="8" alignment="CENTER_RIGHT">
+                <TextField fx:id="searchField" promptText="Search menu items..."
+                           prefHeight="45.0"
+                           style="-fx-background-radius: 5; -fx-padding: 0 15; -fx-font-size: 14px;" />
+                <Button text="Search" onAction="#handleRefresh" styleClass="secondary-btn" />
+            </HBox>
+            <Button text="Refresh" onAction="#handleRefresh" styleClass="primary-btn" />
+        </HBox>
+    </top>
+
+    <!-- Main Content -->
+    <center>
+        <SplitPane dividerPositions="0.65">
+            <!-- Left: Menu List -->
+            <VBox spacing="15" SplitPane.resizableWithParent="true">
+                <padding>
+                    <Insets top="20" right="20" bottom="20" left="20" />
+                </padding>
+                <TableView fx:id="menuTable" VBox.vgrow="ALWAYS"
+                          fixedCellSize="50.0" styleClass="table-row-cell">
+                    <columns>
+                        <TableColumn fx:id="colId" text="Sl" prefWidth="60" />
+                        <TableColumn fx:id="colName" text="Name" prefWidth="180" />
+                        <TableColumn fx:id="colCategory" text="Type" prefWidth="140" />
+                        <TableColumn fx:id="colPrice" text="Price ($)" prefWidth="100" />
+                        <TableColumn fx:id="colStatus" text="Availability" prefWidth="120" />
+                    </columns>
+                    <placeholder>
+                        <Label text="No Menu Items Found"
+                               style="-fx-font-size: 16px; -fx-text-fill: #9ca3af;" />
+                    </placeholder>
+                </TableView>
+            </VBox>
+
+            <!-- Right: Editor Panel -->
+            <VBox spacing="15"
+                  style="-fx-background-color: white; -fx-background-radius: 14; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.12), 12, 0.2, 0, 4);">
+                <padding>
+                    <Insets top="20" right="20" bottom="20" left="20" />
+                </padding>
+                <Label text="Item Details" style="-fx-font-size: 24px; -fx-font-weight: 800; -fx-text-fill: #2c3e50;" />
+
+                <!-- Image section -->
+                <VBox spacing="10" alignment="CENTER">
+                    <ImageView fx:id="itemImageView" fitWidth="150" fitHeight="150" preserveRatio="true"
+                               style="-fx-border-color: #e5e7eb; -fx-border-radius: 12; -fx-background-radius: 12; -fx-padding: 6;" />
+                    <Button text="Change Image" onAction="#handleChangeImage" styleClass="secondary-btn" />
+                </VBox>
+
+                <!-- Form fields -->
+                <GridPane hgap="10" vgap="12">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="35" />
+                        <ColumnConstraints percentWidth="65" />
+                    </columnConstraints>
+
+                          <Label text="Item Name" GridPane.rowIndex="0" GridPane.columnIndex="0"
+                              style="-fx-text-fill: #7f8c8d; -fx-font-size: 12px; -fx-font-weight: bold;" />
+                          <TextField fx:id="itemNameField" GridPane.rowIndex="0" GridPane.columnIndex="1"
+                               style="-fx-text-fill: #2c3e50; -fx-font-size: 14px;" />
+
+                          <Label text="Category" GridPane.rowIndex="1" GridPane.columnIndex="0"
+                              style="-fx-text-fill: #7f8c8d; -fx-font-size: 12px; -fx-font-weight: bold;" />
+                          <ComboBox fx:id="categoryCombo" GridPane.rowIndex="1" GridPane.columnIndex="1"
+                              style="-fx-text-fill: #2c3e50; -fx-font-size: 14px;" />
+
+                          <Label text="Price" GridPane.rowIndex="2" GridPane.columnIndex="0"
+                              style="-fx-text-fill: #7f8c8d; -fx-font-size: 12px; -fx-font-weight: bold;" />
+                          <TextField fx:id="priceField" GridPane.rowIndex="2" GridPane.columnIndex="1"
+                               style="-fx-text-fill: #2c3e50; -fx-font-size: 14px;" />
+
+                          <Label text="Status" GridPane.rowIndex="3" GridPane.columnIndex="0"
+                              style="-fx-text-fill: #7f8c8d; -fx-font-size: 12px; -fx-font-weight: bold;" />
+                          <ComboBox fx:id="statusCombo" GridPane.rowIndex="3" GridPane.columnIndex="1"
+                              style="-fx-text-fill: #2c3e50; -fx-font-size: 14px;" />
+                </GridPane>
+
+                <!-- Actions -->
+                <HBox spacing="10">
+                    <Button text="Clear Form" onAction="#handleClearForm"
+                            style="-fx-background-color: #e5e7eb; -fx-text-fill: #0f172a; -fx-background-radius: 10; -fx-padding: 10 16;" />
+                    <Region HBox.hgrow="ALWAYS" />
+                    <Button text="Save Item" onAction="#handleSave" styleClass="primary-btn" />
+                </HBox>
+
+                <HBox spacing="10">
+                    <Region HBox.hgrow="ALWAYS" />
+                    <Button text="DELETE ITEM" onAction="#handleDelete"
+                            prefHeight="40.0" prefWidth="120.0"
+                            style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5;" />
+                </HBox>
+            </VBox>
+        </SplitPane>
+    </center>
 </BorderPane>
