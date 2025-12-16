@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.collections.FXCollections?>
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.databrew.cafe.controller.PosController">
+  <left>
+    <VBox spacing="8" padding="12">
+      <Label text="Menu" styleClass="section-title" />
+      <ListView fx:id="menuList" />
+      <Button text="Add to Cart" onAction="#onAdd" />
+    </VBox>
+  </left>
+  <center>
+    <VBox spacing="8" padding="12">
+      <Label text="Cart" styleClass="section-title" />
+      <TableView fx:id="cartTable">
+        <columns>
+          <TableColumn text="Item" />
+          <TableColumn text="Qty" />
+          <TableColumn text="Total" />
+        </columns>
+      </TableView>
+      <HBox spacing="8">
+        <Label text="Customer" />
+        <TextField fx:id="customerField" />
+      </HBox>
+      <HBox spacing="8">
+        <Label text="Method" />
+        <ComboBox fx:id="methodCombo">
+          <items>
+            <FXCollections fx:factory="observableArrayList">
+              <String fx:value="CASH" />
+              <String fx:value="CARD" />
+              <String fx:value="MFS" />
+            </FXCollections>
+          </items>
+        </ComboBox>
+      </HBox>
+      <Label fx:id="totalLabel" styleClass="metric" />
+      <Button text="Checkout" onAction="#onCheckout" styleClass="primary-btn" />
+    </VBox>
+  </center>
+</BorderPane>

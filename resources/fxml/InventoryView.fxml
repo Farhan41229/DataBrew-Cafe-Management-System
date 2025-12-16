@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.databrew.cafe.controller.InventoryController">
+  <center>
+    <VBox spacing="8" padding="12">
+      <Label text="Inventory" styleClass="section-title" />
+      <TableView fx:id="inventoryTable">
+        <columns>
+          <TableColumn fx:id="ingredientCol" text="Ingredient ID" />
+          <TableColumn fx:id="qtyCol" text="Quantity" />
+        </columns>
+      </TableView>
+    </VBox>
+  </center>
+</BorderPane>

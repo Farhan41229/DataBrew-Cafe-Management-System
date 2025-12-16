@@ -1,0 +1,28 @@
+java --module-path "C:\Java\javafx-sdk-24.0.2\lib" --add-modules javafx.controls,javafx.fxml --enable-native-access=javafx.graphics `
+  -cp "$PWD\bin;$PWD\lib\mysql-connector-j-9.1.0.jar" `
+  com.databrew.cafe.App
+
+
+go to mysql : mysql -u root -pIshraq@217 
+go back from mysql : exit; 
+
+check the number of active users in mySQL database: 
+mysql -u root -pIshraq@217 -e "USE cafedb; SELECT username,is_active FROM users;"
+
+mysql> use cafedb
+Database changed
+mysql> SELECT username, is_active, password_hash FROM users WHERE username='admin';
++----------+-----------+------------------------------------------------------------------+
+| username | is_active | password_hash                                                    |
++----------+-----------+------------------------------------------------------------------+
+| admin    |         1 | e86f78a8a3caf0b60d8e74e5942aa6d86dc150cd3c03338aef25b7d2d7e3acc7 |
++----------+-----------+------------------------------------------------------------------+
+
+
+username : admin 
+password : Admin@123
+
+Use the built-in admin account: username admin, password Admin@123. 
+There’s no user self-registration flow implemented; accounts must be 
+inserted directly in the database (see the users table) if you need more 
+users.

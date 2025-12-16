@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane fx:id="mainLayout" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.databrew.cafe.controller.DashboardController">
+   
+   <left>
+      <VBox spacing="15" style="-fx-background-color: #2c3e50; -fx-padding: 20;">
+         <Label text="DataBrew Cafe" textFill="WHITE">
+            <font>
+               <Font name="System Bold" size="20.0" />
+            </font>
+         </Label>
+         
+         <Button text="Dashboard" maxWidth="Infinity" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER_LEFT;"/>
+         <Button text="POS / Orders" maxWidth="Infinity" onAction="#handleGoToPOS" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER_LEFT;"/>
+         <Button text="Menu Management" maxWidth="Infinity" onAction="#handleGoToMenu" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER_LEFT;"/>
+         <Button text="Employees" maxWidth="Infinity" onAction="#handleGoToEmployees" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER_LEFT;"/>
+         <Button text="Inventory" maxWidth="Infinity" onAction="#handleGoToInventory" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER_LEFT;"/>
+         
+         <Label text="___________________" textFill="#5d6d7e"/>
+         <Button text="Logout" maxWidth="Infinity" onAction="#handleLogout" style="-fx-background-color: #e74c3c; -fx-text-fill: white;"/>
+      </VBox>
+   </left>
+
+   <center>
+      <VBox alignment="CENTER" spacing="20">
+         <Label text="Welcome to DataBrew System" textFill="#2c3e50">
+             <font>
+               <Font size="24.0" />
+             </font>
+         </Label>
+         <Label text="Select an option from the sidebar to begin." textFill="#7f8c8d"/>
+      </VBox>
+   </center>
+   
+</BorderPane>

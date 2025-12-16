@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.databrew.cafe.controller.EmployeeController">
+  <left>
+    <VBox spacing="6" padding="10">
+      <Label text="Employees" styleClass="section-title" />
+      <ListView fx:id="employeeList" prefWidth="160" />
+    </VBox>
+  </left>
+  <center>
+    <TabPane>
+      <tabs>
+        <Tab text="Details">
+          <AnchorPane>
+            <children>
+              <GridPane hgap="10" vgap="10" padding="12" AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.bottomAnchor="0">
+                <Label text="Position" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+                <TextField fx:id="positionField" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+                <Label text="Hire Date" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+                <DatePicker fx:id="hireDatePicker" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+                <Label text="Salary" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+                <TextField fx:id="salaryField" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+                <Label text="User Id" GridPane.rowIndex="3" GridPane.columnIndex="0" />
+                <TextField fx:id="userIdField" GridPane.rowIndex="3" GridPane.columnIndex="1" />
+                <Button text="Save" onAction="#onSave" styleClass="primary-btn" GridPane.rowIndex="4" GridPane.columnIndex="1" />
+              </GridPane>
+            </children>
+          </AnchorPane>
+        </Tab>
+        <Tab text="Shifts">
+          <VBox spacing="8" padding="12">
+            <HBox spacing="8">
+              <ComboBox fx:id="shiftBox" promptText="Select shift" />
+              <DatePicker fx:id="shiftDatePicker" />
+              <Button text="Assign" onAction="#onAssignShift" />
+            </HBox>
+            <TableView fx:id="attendanceTable">
+              <columns>
+                <TableColumn fx:id="attDateCol" text="Date" prefWidth="120" />
+                <TableColumn fx:id="attShiftCol" text="Shift" prefWidth="120" />
+                <TableColumn fx:id="attStatusCol" text="Status" prefWidth="120" />
+              </columns>
+            </TableView>
+          </VBox>
+        </Tab>
+        <Tab text="Accounts">
+          <VBox spacing="8" padding="12">
+            <TableView fx:id="employeeTable">
+              <columns>
+                <TableColumn fx:id="colId" text="ID" prefWidth="80" />
+                <TableColumn fx:id="colName" text="Username" prefWidth="160" />
+                <TableColumn fx:id="colEmail" text="Email" prefWidth="200" />
+                <TableColumn fx:id="colActive" text="Active" prefWidth="80" />
+              </columns>
+            </TableView>
+          </VBox>
+        </Tab>
+      </tabs>
+    </TabPane>
+  </center>
+</BorderPane>
