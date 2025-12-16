@@ -60,7 +60,9 @@ public class DashboardController {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/fxml/LoginView.fxml"));
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(getClass().getResource("/css/theme.css").toExternalForm());
+            stage.setScene(scene);
             stage.setTitle("Login - DataBrew Cafe");
             stage.show();
         } catch (IOException e) {
