@@ -11,33 +11,41 @@
 
 <BorderPane fx:id="mainLayout" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.databrew.cafe.controller.DashboardController">
    <top>
-      <HBox alignment="CENTER_LEFT" spacing="14" styleClass="app-bar">
+      <HBox alignment="CENTER" spacing="14" styleClass="app-bar">
          <padding>
             <Insets top="12" right="16" bottom="12" left="16" />
          </padding>
-                  <Label text="☕" styleClass="logo-icon" />
-                  <Label text="DataBrew Cafe" styleClass="app-title" />
+         <HBox alignment="CENTER_LEFT" spacing="8">
+            <Label fx:id="currentUserLabel" text="Current User: admin" styleClass="user-chip" />
+         </HBox>
          <Pane HBox.hgrow="ALWAYS" />
-         <Button text="Minimize" onAction="#handleMinimize" styleClass="window-btn" />
+         <HBox alignment="CENTER" spacing="12">
+            <Label text="☕" styleClass="logo-icon" />
+            <Label text="DataBrew Cafe" styleClass="app-title" />
+         </HBox>
+         <Pane HBox.hgrow="ALWAYS" />
          <Button fx:id="fullscreenButton" text="Fullscreen" onAction="#handleFullscreen" styleClass="window-btn" />
       </HBox>
    </top>
 
    <left>
-      <VBox spacing="15" styleClass="sidebar">
+      <VBox spacing="18" prefWidth="240" styleClass="sidebar">
          <padding>
-            <Insets top="20" right="16" bottom="20" left="16" />
+            <Insets top="24" right="18" bottom="24" left="18" />
          </padding>
-         <Label text="DataBrew Cafe" styleClass="sidebar-title" />
+         <HBox alignment="CENTER">
+            <Label text="Dashboard" styleClass="sidebar-title" maxWidth="Infinity" />
+         </HBox>
 
-         <Button text="Dashboard" maxWidth="Infinity" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER_LEFT;" />
-         <Button text="POS / Orders" maxWidth="Infinity" onAction="#handleGoToPOS" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER_LEFT;" />
-         <Button text="Menu Management" maxWidth="Infinity" onAction="#handleGoToMenu" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER_LEFT;" />
-         <Button text="Employees" maxWidth="Infinity" onAction="#handleGoToEmployees" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER_LEFT;" />
-         <Button text="Inventory" maxWidth="Infinity" onAction="#handleGoToInventory" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER_LEFT;" />
+          <Button text="POS / Orders" maxWidth="Infinity" onAction="#handleGoToPOS" styleClass="sidebar-btn" />
+          <Button text="Menu Management" maxWidth="Infinity" onAction="#handleGoToMenu" styleClass="sidebar-btn" />
+          <Button text="Employees" maxWidth="Infinity" onAction="#handleGoToEmployees" styleClass="sidebar-btn" />
+          <Button text="Inventory" maxWidth="Infinity" onAction="#handleGoToInventory" styleClass="sidebar-btn" />
 
-         <Label text="___________________" textFill="#5d6d7e" />
-         <Button text="Logout" maxWidth="Infinity" onAction="#handleLogout" style="-fx-background-color: #e74c3c; -fx-text-fill: white;" />
+          <Pane VBox.vgrow="ALWAYS" />
+
+          <Button text="Logout" maxWidth="Infinity" onAction="#handleLogout" styleClass="sidebar-btn danger"
+             style="-fx-background-color: linear-gradient(to right, #f87171, #dc2626); -fx-text-fill: white; -fx-alignment: center; -fx-padding: 18 26; -fx-font-size: 18px; -fx-font-weight: 900; -fx-background-radius: 14; -fx-border-radius: 14; -fx-cursor: hand; -fx-min-width: 220;" />
       </VBox>
    </left>
 

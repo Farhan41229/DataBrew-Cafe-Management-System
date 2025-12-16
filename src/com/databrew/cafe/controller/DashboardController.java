@@ -6,10 +6,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 import java.io.IOException;
+import com.databrew.cafe.model.User;
 
 public class DashboardController {
 
@@ -18,6 +20,18 @@ public class DashboardController {
 
     @FXML
     private Button fullscreenButton;
+
+    @FXML
+    private Label currentUserLabel;
+
+    private User currentUser;
+
+    public void setCurrentUser(User user) {
+        this.currentUser = user;
+        if (currentUserLabel != null && user != null) {
+            currentUserLabel.setText("Current User: " + user.getUsername());
+        }
+    }
 
     @FXML
     private void handleGoToPOS(ActionEvent event) {

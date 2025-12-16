@@ -34,6 +34,10 @@ public class LoginController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/DashboardView.fxml"));
             Scene scene = new Scene(loader.load());
             scene.getStylesheets().add(getClass().getResource("/css/theme.css").toExternalForm());
+            com.databrew.cafe.controller.DashboardController controller = loader.getController();
+            if (controller != null) {
+                controller.setCurrentUser(user);
+            }
             stage.setScene(scene);
             stage.setTitle("DataBrew Cafe Dashboard");
         } catch (Exception e) {
