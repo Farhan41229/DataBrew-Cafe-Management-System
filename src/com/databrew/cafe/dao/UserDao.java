@@ -52,4 +52,25 @@ public class UserDao {
             return users;
         }
     }
+
+    public User findById(long id) throws SQLException {
+        String sql = "SELECT id, username, email, password_hash, full_name, is_active FROM users WHERE id = ?";
+        try (Connection conn = DBConnection.getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setLong(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (!rs.next()) {
+                    return null;
+                }
+                User u = new User();
+                u.setId(rs.getLong("id"));
+                u.setUsername(rs.getString("username"));
+                u.setEmail(rs.getString("email"));
+                u.setPasswordHash(rs.getString("password_hash"));
+                u.setFullName(rs.getString("full_name"));
+                u.setActive(rs.getBoolean("is_active"));
+                return u;
+            }
+        }
+    }
 }

@@ -309,6 +309,10 @@ DELIMITER ;
 INSERT INTO roles (name, description) VALUES ('ADMIN','Full access'), ('STAFF','POS and inventory');
 INSERT INTO taxes (name, rate) VALUES ('VAT', 15.00);
 INSERT INTO discounts (name, type, value, applies_to) VALUES ('Student 10', 'PERCENT', 10.00, 'STUDENT');
+INSERT INTO shifts (name, start_time, end_time) VALUES
+  ('Morning', '06:00:00', '14:00:00'),
+  ('Day', '14:00:00', '22:00:00'),
+  ('Night', '22:00:00', '06:00:00');
 INSERT INTO categories (name) VALUES ('Coffee'), ('Bakery');
 INSERT INTO menu_items (category_id, name, price, is_active) VALUES (1, 'Espresso', 3.50, 1), (1, 'Latte', 4.50, 1), (2, 'Croissant', 2.80, 1);
 INSERT INTO ingredients (name, unit, min_threshold) VALUES ('Coffee Beans','g',500), ('Milk','ml',1000), ('Butter','g',500);

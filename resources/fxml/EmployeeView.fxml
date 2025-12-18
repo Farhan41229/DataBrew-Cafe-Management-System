@@ -3,73 +3,102 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <BorderPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml" fx:controller="com.databrew.cafe.controller.EmployeeController">
-  <left>
-    <VBox spacing="6">
-      <padding>
-        <Insets top="10" right="10" bottom="10" left="10" />
-      </padding>
-      <Label text="Employees" styleClass="section-title" />
-      <ListView fx:id="employeeList" prefWidth="160" />
-    </VBox>
-  </left>
   <center>
-    <TabPane>
-      <tabs>
-        <Tab text="Details">
-          <AnchorPane>
-            <children>
-              <GridPane hgap="10" vgap="10" AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.bottomAnchor="0">
-                <padding>
-                  <Insets top="12" right="12" bottom="12" left="12" />
-                </padding>
-                <Label text="Position" GridPane.rowIndex="0" GridPane.columnIndex="0" />
-                <TextField fx:id="positionField" GridPane.rowIndex="0" GridPane.columnIndex="1" />
-                <Label text="Hire Date" GridPane.rowIndex="1" GridPane.columnIndex="0" />
-                <DatePicker fx:id="hireDatePicker" GridPane.rowIndex="1" GridPane.columnIndex="1" />
-                <Label text="Salary" GridPane.rowIndex="2" GridPane.columnIndex="0" />
-                <TextField fx:id="salaryField" GridPane.rowIndex="2" GridPane.columnIndex="1" />
-                <Label text="User Id" GridPane.rowIndex="3" GridPane.columnIndex="0" />
-                <TextField fx:id="userIdField" GridPane.rowIndex="3" GridPane.columnIndex="1" />
-                <Button text="Save" onAction="#onSave" styleClass="primary-btn" GridPane.rowIndex="4" GridPane.columnIndex="1" />
-              </GridPane>
-            </children>
-          </AnchorPane>
-        </Tab>
-        <Tab text="Shifts">
-          <VBox spacing="8">
-            <padding>
-              <Insets top="12" right="12" bottom="12" left="12" />
-            </padding>
-            <HBox spacing="8">
-              <ComboBox fx:id="shiftBox" promptText="Select shift" />
-              <DatePicker fx:id="shiftDatePicker" />
-              <Button text="Assign" onAction="#onAssignShift" />
+    <SplitPane dividerPositions="0.62">
+      <!-- Main employee table -->
+      <VBox spacing="12" SplitPane.resizableWithParent="true">
+        <padding>
+          <Insets top="16" right="16" bottom="16" left="16" />
+        </padding>
+        <TableView fx:id="employeeTable" VBox.vgrow="ALWAYS" fixedCellSize="44.0" styleClass="menu-table">
+          <columns>
+            <TableColumn fx:id="colEmpId" text="Employee ID" prefWidth="110" />
+            <TableColumn fx:id="colEmpName" text="Name" prefWidth="140" />
+            <TableColumn fx:id="colEmpBranch" text="Branch" prefWidth="120" />
+            <TableColumn fx:id="colEmpAge" text="Age" prefWidth="70" />
+            <TableColumn fx:id="colEmpShift" text="Shift" prefWidth="140" />
+            <TableColumn fx:id="colEmpSalary" text="Salary" prefWidth="120" />
+            <TableColumn fx:id="colEmpStatus" text="Status" prefWidth="100" />
+          </columns>
+          <placeholder>
+            <Label text="No employees" />
+          </placeholder>
+        </TableView>
+      </VBox>
+
+      <!-- Right panel with tabs -->
+      <VBox spacing="14" style="-fx-background-color: white; -fx-padding: 16; -fx-background-radius: 12; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 12, 0.2, 0, 4);">
+        <HBox spacing="10" alignment="CENTER_LEFT" styleClass="pill-bar">
+          <Button fx:id="tabDetailsBtn" text="Details" styleClass="pill-btn" onAction="#handleShowDetails" />
+          <Button fx:id="tabShiftsBtn" text="Shifts" styleClass="pill-btn" onAction="#handleShowShifts" />
+          <Button fx:id="tabAccountsBtn" text="Accounts" styleClass="pill-btn" onAction="#handleShowAccounts" />
+        </HBox>
+
+        <StackPane VBox.vgrow="ALWAYS">
+          <!-- Details -->
+          <VBox fx:id="detailsPane" spacing="14" alignment="TOP_LEFT">
+            <GridPane hgap="14" vgap="14">
+              <columnConstraints>
+                <ColumnConstraints percentWidth="35" />
+                <ColumnConstraints percentWidth="65" />
+              </columnConstraints>
+              <Label text="Name" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="form-label" />
+              <TextField fx:id="nameField" GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="form-control" />
+
+              <Label text="Branch" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="form-label" />
+              <TextField fx:id="branchField" GridPane.rowIndex="1" GridPane.columnIndex="1" styleClass="form-control" />
+
+              <Label text="Age" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="form-label" />
+              <TextField fx:id="ageField" GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="form-control" />
+
+              <Label text="Status" GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="form-label" />
+              <ComboBox fx:id="statusCombo" GridPane.rowIndex="3" GridPane.columnIndex="1" styleClass="form-control" />
+
+              <Label text="Position" GridPane.rowIndex="4" GridPane.columnIndex="0" styleClass="form-label" />
+              <TextField fx:id="positionField" GridPane.rowIndex="4" GridPane.columnIndex="1" styleClass="form-control" />
+
+              <Label text="Hire Date" GridPane.rowIndex="5" GridPane.columnIndex="0" styleClass="form-label" />
+              <DatePicker fx:id="hireDatePicker" GridPane.rowIndex="5" GridPane.columnIndex="1" styleClass="form-control" />
+            </GridPane>
+          </VBox>
+
+          <!-- Shifts -->
+          <VBox fx:id="shiftsPane" spacing="16" alignment="TOP_LEFT" visible="false" managed="false">
+            <HBox spacing="8" alignment="CENTER_LEFT" styleClass="shift-current-row">
+              <Label text="Current Shift:" styleClass="form-label" />
+              <Label fx:id="currentShiftLabel" text="None" styleClass="shift-current-value" />
             </HBox>
-            <TableView fx:id="attendanceTable">
-              <columns>
-                <TableColumn fx:id="attDateCol" text="Date" prefWidth="120" />
-                <TableColumn fx:id="attShiftCol" text="Shift" prefWidth="120" />
-                <TableColumn fx:id="attStatusCol" text="Status" prefWidth="120" />
-              </columns>
-            </TableView>
+            <Label text="Select Shift" styleClass="form-label" />
+            <ComboBox fx:id="shiftBox" promptText="Select shift" styleClass="shift-combo" />
           </VBox>
-        </Tab>
-        <Tab text="Accounts">
-          <VBox spacing="8">
-            <padding>
-              <Insets top="12" right="12" bottom="12" left="12" />
-            </padding>
-            <TableView fx:id="employeeTable">
-              <columns>
-                <TableColumn fx:id="colId" text="ID" prefWidth="80" />
-                <TableColumn fx:id="colName" text="Username" prefWidth="160" />
-                <TableColumn fx:id="colEmail" text="Email" prefWidth="200" />
-                <TableColumn fx:id="colActive" text="Active" prefWidth="80" />
-              </columns>
-            </TableView>
+
+          <!-- Accounts -->
+          <VBox fx:id="accountsPane" spacing="14" alignment="TOP_LEFT" visible="false" managed="false">
+            <GridPane hgap="14" vgap="14">
+              <columnConstraints>
+                <ColumnConstraints percentWidth="35" />
+                <ColumnConstraints percentWidth="65" />
+              </columnConstraints>
+              <Label text="Salary" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="form-label" />
+              <TextField fx:id="salaryField" GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="form-control" />
+
+              <Label text="Bank Account" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="form-label" />
+              <TextField fx:id="bankField" GridPane.rowIndex="1" GridPane.columnIndex="1" styleClass="form-control" />
+
+              <Label text="System Password" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="form-label" />
+              <PasswordField fx:id="passwordField" GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="form-control" />
+            </GridPane>
           </VBox>
-        </Tab>
-      </tabs>
-    </TabPane>
+        </StackPane>
+
+        <Region VBox.vgrow="ALWAYS" />
+
+        <HBox spacing="10" alignment="CENTER" styleClass="actions-bar">
+          <Button text="Clear" onAction="#onClearForm" styleClass="btn-clear-strong" prefHeight="50" maxWidth="Infinity" HBox.hgrow="ALWAYS" />
+          <Button text="Add / Update" onAction="#onSave" styleClass="btn-primary-strong" prefHeight="50" maxWidth="Infinity" HBox.hgrow="ALWAYS" />
+          <Button text="Delete" onAction="#onDeleteEmployee" styleClass="btn-danger-strong" prefHeight="50" maxWidth="Infinity" HBox.hgrow="ALWAYS" />
+        </HBox>
+      </VBox>
+    </SplitPane>
   </center>
 </BorderPane>
