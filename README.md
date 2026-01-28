@@ -91,6 +91,50 @@ Includes SQL scripts that support easy backup and restoration.
 
 ---
 
+## ⚙️ Configuration
+
+### Database Setup
+
+1. Copy the example configuration file:
+   ```bash
+   cp resources/config.properties.example resources/config.properties
+   ```
+
+2. Edit `resources/config.properties` with your MySQL credentials:
+   ```properties
+   db.url=jdbc:mysql://localhost:3306/cafedb?useSSL=false&serverTimezone=UTC
+   db.username=your_mysql_username
+   db.password=your_mysql_password
+   ```
+
+3. Run the schema script to create the database:
+   ```bash
+   mysql -u your_username -p < resources/schema.sql
+   ```
+
+**Note:** The `config.properties` file is excluded from version control for security.
+
+### Connection Pooling Setup
+
+This project uses **HikariCP** for high-performance database connection pooling.
+
+1. Download required JAR files:
+   - HikariCP-5.1.0.jar
+   - slf4j-api-2.0.9.jar
+   - slf4j-simple-2.0.9.jar
+
+2. Place them in the `lib/` folder
+
+3. See [HIKARICP_SETUP.md](HIKARICP_SETUP.md) for detailed setup instructions
+
+**Benefits:**
+- ⚡ Up to 100x faster database operations
+- 🔄 Efficient connection reuse
+- 📊 Built-in monitoring and statistics
+- 🛡️ Connection leak detection
+
+---
+
 
 
 

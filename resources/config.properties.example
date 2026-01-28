@@ -1,0 +1,24 @@
+# Database Configuration Template
+# Copy this file to 'config.properties' and update with your actual credentials
+
+db.url=jdbc:mysql://localhost:3306/cafedb?useSSL=false&serverTimezone=UTC
+db.username=your_mysql_username
+db.password=your_mysql_password
+
+# Connection Pool Configuration (HikariCP)
+# Maximum number of connections in the pool
+db.pool.maxPoolSize=10
+# Minimum number of idle connections to maintain
+db.pool.minIdle=5
+# Maximum time (ms) to wait for a connection from the pool
+db.pool.connectionTimeout=30000
+# Maximum time (ms) that a connection can sit idle in the pool
+db.pool.idleTimeout=600000
+# Maximum lifetime (ms) of a connection in the pool
+db.pool.maxLifetime=1800000
+# Time (ms) before a connection leak is logged (0 = disabled)
+db.pool.leakDetectionThreshold=60000
+
+# Application Configuration
+app.name=DataBrew Cafe Management System
+app.version=1.0.0
