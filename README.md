@@ -114,6 +114,25 @@ Includes SQL scripts that support easy backup and restoration.
 
 **Note:** The `config.properties` file is excluded from version control for security.
 
+### Connection Pooling Setup
+
+This project uses **HikariCP** for high-performance database connection pooling.
+
+1. Download required JAR files:
+   - HikariCP-5.1.0.jar
+   - slf4j-api-2.0.9.jar
+   - slf4j-simple-2.0.9.jar
+
+2. Place them in the `lib/` folder
+
+3. See [HIKARICP_SETUP.md](HIKARICP_SETUP.md) for detailed setup instructions
+
+**Benefits:**
+- ⚡ Up to 100x faster database operations
+- 🔄 Efficient connection reuse
+- 📊 Built-in monitoring and statistics
+- 🛡️ Connection leak detection
+
 ---
 
 
