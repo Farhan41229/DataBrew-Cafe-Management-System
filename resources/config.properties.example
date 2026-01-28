@@ -1,0 +1,10 @@
+# Database Configuration Template
+# Copy this file to 'config.properties' and update with your actual credentials
+
+db.url=jdbc:mysql://localhost:3306/cafedb?useSSL=false&serverTimezone=UTC
+db.username=your_mysql_username
+db.password=your_mysql_password
+
+# Application Configuration
+app.name=DataBrew Cafe Management System
+app.version=1.0.0

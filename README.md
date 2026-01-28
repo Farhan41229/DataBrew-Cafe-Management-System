@@ -91,6 +91,31 @@ Includes SQL scripts that support easy backup and restoration.
 
 ---
 
+## ⚙️ Configuration
+
+### Database Setup
+
+1. Copy the example configuration file:
+   ```bash
+   cp resources/config.properties.example resources/config.properties
+   ```
+
+2. Edit `resources/config.properties` with your MySQL credentials:
+   ```properties
+   db.url=jdbc:mysql://localhost:3306/cafedb?useSSL=false&serverTimezone=UTC
+   db.username=your_mysql_username
+   db.password=your_mysql_password
+   ```
+
+3. Run the schema script to create the database:
+   ```bash
+   mysql -u your_username -p < resources/schema.sql
+   ```
+
+**Note:** The `config.properties` file is excluded from version control for security.
+
+---
+
 
 
 
