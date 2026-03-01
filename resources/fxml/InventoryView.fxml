@@ -4,17 +4,63 @@
 <?import javafx.scene.layout.*?>
 <BorderPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml" fx:controller="com.databrew.cafe.controller.InventoryController">
   <center>
-    <VBox spacing="8">
-      <padding>
-        <Insets top="12" right="12" bottom="12" left="12" />
-      </padding>
-      <Label text="Inventory" styleClass="section-title" />
-      <TableView fx:id="inventoryTable">
-        <columns>
-          <TableColumn fx:id="ingredientCol" text="Ingredient ID" />
-          <TableColumn fx:id="qtyCol" text="Quantity" />
-        </columns>
-      </TableView>
-    </VBox>
+    <SplitPane dividerPositions="0.62">
+      <!-- Left: Inventory table -->
+      <VBox spacing="12" SplitPane.resizableWithParent="true">
+        <padding>
+          <Insets top="16" right="16" bottom="16" left="16" />
+        </padding>
+        <HBox spacing="10" alignment="CENTER_LEFT">
+          <Label text="Inventory" styleClass="section-title" />
+          <Region HBox.hgrow="ALWAYS" />
+          <ToggleButton fx:id="lowStockToggle" text="Show Low Stock" styleClass="pill-btn" onAction="#onToggleLowStock" />
+        </HBox>
+        <TableView fx:id="inventoryTable" VBox.vgrow="ALWAYS" fixedCellSize="44.0" styleClass="menu-table">
+          <columns>
+            <TableColumn fx:id="colId" text="ID" prefWidth="60" />
+            <TableColumn fx:id="colName" text="Ingredient" prefWidth="160" />
+            <TableColumn fx:id="colQty" text="Quantity" prefWidth="100" />
+            <TableColumn fx:id="colUnit" text="Unit" prefWidth="80" />
+            <TableColumn fx:id="colMinThreshold" text="Min Threshold" prefWidth="120" />
+            <TableColumn fx:id="colStatus" text="Stock Status" prefWidth="110" />
+            <TableColumn fx:id="colUpdated" text="Last Updated" prefWidth="160" />
+          </columns>
+          <placeholder>
+            <Label text="No inventory items" />
+          </placeholder>
+        </TableView>
+      </VBox>
+
+      <!-- Right: Form panel -->
+      <VBox spacing="14" style="-fx-background-color: white; -fx-padding: 16; -fx-background-radius: 12; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 12, 0.2, 0, 4);">
+        <Label text="Item Details" styleClass="section-title" />
+        <GridPane hgap="14" vgap="14">
+          <columnConstraints>
+            <ColumnConstraints percentWidth="35" />
+            <ColumnConstraints percentWidth="65" />
+          </columnConstraints>
+
+          <Label text="Ingredient Name" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="form-label" />
+          <TextField fx:id="nameField" GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="form-control" promptText="e.g. Coffee Beans" />
+
+          <Label text="Unit" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="form-label" />
+          <TextField fx:id="unitField" GridPane.rowIndex="1" GridPane.columnIndex="1" styleClass="form-control" promptText="e.g. g, ml, pcs" />
+
+          <Label text="Quantity" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="form-label" />
+          <TextField fx:id="qtyField" GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="form-control" promptText="Current stock" />
+
+          <Label text="Min Threshold" GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="form-label" />
+          <TextField fx:id="minThresholdField" GridPane.rowIndex="3" GridPane.columnIndex="1" styleClass="form-control" promptText="Low-stock alert level" />
+        </GridPane>
+
+        <Region VBox.vgrow="ALWAYS" />
+
+        <HBox spacing="10" alignment="CENTER" styleClass="actions-bar">
+          <Button text="Clear" onAction="#onClear" styleClass="btn-clear-strong" prefHeight="50" maxWidth="Infinity" HBox.hgrow="ALWAYS" />
+          <Button text="Add / Update" onAction="#onSave" styleClass="btn-primary-strong" prefHeight="50" maxWidth="Infinity" HBox.hgrow="ALWAYS" />
+          <Button text="Delete" onAction="#onDelete" styleClass="btn-danger-strong" prefHeight="50" maxWidth="Infinity" HBox.hgrow="ALWAYS" />
+        </HBox>
+      </VBox>
+    </SplitPane>
   </center>
 </BorderPane>

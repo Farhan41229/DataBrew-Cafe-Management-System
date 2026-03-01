@@ -5,7 +5,10 @@ import java.time.LocalDateTime;
 public class InventoryItem {
     private long id;
     private long ingredientId;
+    private String ingredientName;
+    private String unit;
     private double quantity;
+    private double minThreshold;
     private LocalDateTime lastUpdated;
 
     public long getId() {
@@ -32,11 +35,44 @@ public class InventoryItem {
         this.quantity = quantity;
     }
 
+    public String getIngredientName() {
+        return ingredientName;
+    }
+
+    public void setIngredientName(String ingredientName) {
+        this.ingredientName = ingredientName;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
+    public double getMinThreshold() {
+        return minThreshold;
+    }
+
+    public void setMinThreshold(double minThreshold) {
+        this.minThreshold = minThreshold;
+    }
+
     public LocalDateTime getLastUpdated() {
         return lastUpdated;
     }
 
     public void setLastUpdated(LocalDateTime lastUpdated) {
         this.lastUpdated = lastUpdated;
+    }
+
+    public String getStockStatus() {
+        return quantity <= minThreshold ? "Low" : "OK";
+    }
+
+    @Override
+    public String toString() {
+        return ingredientName != null ? ingredientName : String.valueOf(ingredientId);
     }
 }

@@ -28,3 +28,7 @@ Use the built-in admin account: username admin, password Admin@123.
 There’s no user self-registration flow implemented; accounts must be 
 inserted directly in the database (see the users table) if you need more 
 users.
+
+
+
+New DB password -> MyNewPass (for local host)

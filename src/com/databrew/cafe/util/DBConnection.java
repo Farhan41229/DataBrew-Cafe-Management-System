@@ -10,7 +10,7 @@ import java.sql.SQLException;
 public final class DBConnection {
     private static final String URL = "jdbc:mysql://localhost:3306/cafedb?useSSL=false&serverTimezone=UTC";
     private static final String USER = "root";
-    private static final String PASSWORD = "Ishraq@217";
+    private static final String PASSWORD = "MyNewPass";
 
     static {
         try {
