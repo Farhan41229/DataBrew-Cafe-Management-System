@@ -75,6 +75,9 @@ public class DashboardController {
     @FXML
     private TableColumn<ObservableList<String>, String> roDateCol;
 
+    @FXML
+    private Button userMgmtBtn;
+
     private User currentUser;
     private Parent welcomeContent;
 
@@ -82,6 +85,17 @@ public class DashboardController {
         this.currentUser = user;
         if (currentUserLabel != null && user != null) {
             currentUserLabel.setText("Current User: " + user.getUsername());
+        }
+        // Hide User Management for non-admin users
+        if (userMgmtBtn != null && user != null) {
+            try {
+                java.util.List<String> roles = new com.databrew.cafe.dao.UserDao().getUserRoles(user.getId());
+                boolean isAdmin = roles.stream().anyMatch(r -> r.toLowerCase().contains("admin"));
+                userMgmtBtn.setVisible(isAdmin);
+                userMgmtBtn.setManaged(isAdmin);
+            } catch (Exception e) {
+                System.err.println("Failed to check user roles: " + e.getMessage());
+            }
         }
     }
 
@@ -133,7 +147,7 @@ public class DashboardController {
                 setText(item);
                 if (item.contains("Low") || item.equals("CANCELLED")) {
                     setStyle("-fx-text-fill: #dc2626; -fx-font-weight: 800;");
-                } else if (item.equals("COMPLETED") || item.equals("OK")) {
+                } else if (item.equals("PAID") || item.equals("OK")) {
                     setStyle("-fx-text-fill: #16a34a; -fx-font-weight: 800;");
                 } else if (item.equals("PENDING")) {
                     setStyle("-fx-text-fill: #f59e0b; -fx-font-weight: 800;");

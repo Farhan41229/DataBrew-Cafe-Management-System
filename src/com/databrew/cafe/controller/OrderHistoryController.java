@@ -75,7 +75,7 @@ public class OrderHistoryController {
 
     @FXML
     public void initialize() {
-        statusCombo.setItems(FXCollections.observableArrayList("ALL", "PENDING", "COMPLETED", "CANCELLED"));
+        statusCombo.setItems(FXCollections.observableArrayList("ALL", "PENDING", "PAID", "CANCELLED"));
         statusCombo.getSelectionModel().selectFirst();
 
         wireOrderTable();
@@ -130,7 +130,7 @@ public class OrderHistoryController {
                 }
                 setText(item);
                 switch (item) {
-                    case "COMPLETED":
+                    case "PAID":
                         setStyle("-fx-text-fill: #16a34a; -fx-font-weight: 800;");
                         break;
                     case "CANCELLED":

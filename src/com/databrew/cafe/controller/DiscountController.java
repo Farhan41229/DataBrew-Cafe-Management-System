@@ -36,6 +36,7 @@ public class DiscountController {
     private ComboBox<String> appliesToCombo;
 
     private final DiscountDao discountDao = new DiscountDao();
+    private Discount selectedItem = null;
 
     @FXML
     public void initialize() {
@@ -50,7 +51,11 @@ public class DiscountController {
         appliesToCombo.setItems(FXCollections.observableArrayList("GENERAL", "STUDENT", "STAFF", "LOYAL"));
         appliesToCombo.getSelectionModel().selectFirst();
 
-        discountTable.getSelectionModel().selectedItemProperty().addListener((obs, o, n) -> loadItem(n));
+        discountTable.getSelectionModel().selectedItemProperty().addListener((obs, o, n) -> {
+            if (n != null)
+                selectedItem = n;
+            loadItem(n);
+        });
         refresh();
     }
 
@@ -73,7 +78,7 @@ public class DiscountController {
 
     @FXML
     private void onSave() {
-        Discount sel = discountTable.getSelectionModel().getSelectedItem();
+        Discount sel = selectedItem;
         if (sel == null) {
             onAdd();
         } else {
@@ -83,6 +88,7 @@ public class DiscountController {
 
     @FXML
     private void onAdd() {
+        selectedItem = null;
         discountTable.getSelectionModel().clearSelection();
         if (nameField.getText() == null || nameField.getText().isBlank()) {
             showError("Name is required.");
@@ -102,7 +108,7 @@ public class DiscountController {
 
     @FXML
     private void onUpdateAction() {
-        Discount sel = discountTable.getSelectionModel().getSelectedItem();
+        Discount sel = selectedItem;
         if (sel == null) {
             showError("Select a discount to update.");
             return;
@@ -128,7 +134,7 @@ public class DiscountController {
 
     @FXML
     private void onDelete() {
-        Discount sel = discountTable.getSelectionModel().getSelectedItem();
+        Discount sel = selectedItem;
         if (sel == null)
             return;
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION, "Delete discount \"" + sel.getName() + "\"?",
@@ -146,6 +152,7 @@ public class DiscountController {
 
     @FXML
     private void onClear() {
+        selectedItem = null;
         discountTable.getSelectionModel().clearSelection();
         nameField.clear();
         typeCombo.getSelectionModel().selectFirst();

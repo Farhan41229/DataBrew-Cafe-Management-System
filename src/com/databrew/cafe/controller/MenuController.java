@@ -199,7 +199,7 @@ public class MenuController {
 
     @FXML
     private void handleDelete() {
-        MenuItem selected = menuTable.getSelectionModel().getSelectedItem();
+        MenuItem selected = editingSelection;
         if (selected == null)
             return;
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION, "Delete " + selected.getName() + "?", ButtonType.OK,
@@ -235,11 +235,10 @@ public class MenuController {
     }
 
     private void populateForm(MenuItem item) {
-        editingSelection = item;
         if (item == null) {
-            handleClearForm();
             return;
         }
+        editingSelection = item;
         itemNameField.setText(item.getName());
         priceField.setText(String.valueOf(item.getPrice()));
         if (categoryCombo != null && categories != null) {

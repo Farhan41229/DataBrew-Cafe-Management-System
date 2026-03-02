@@ -89,6 +89,7 @@ public class EmployeeController {
     private final UserDao userDao = new UserDao();
     private ObservableList<Employee> employees = FXCollections.observableArrayList();
     private List<Shift> shifts;
+    private Employee selectedEmployee = null;
 
     @FXML
     public void initialize() {
@@ -108,7 +109,11 @@ public class EmployeeController {
                 c -> new javafx.beans.property.SimpleStringProperty(shiftNameFromId(c.getValue().getShiftId())));
         colEmpSalary.setCellValueFactory(c -> new javafx.beans.property.SimpleDoubleProperty(c.getValue().getSalary()));
         colEmpStatus.setCellValueFactory(c -> new javafx.beans.property.SimpleStringProperty(c.getValue().getStatus()));
-        employeeTable.getSelectionModel().selectedItemProperty().addListener((obs, o, n) -> loadEmployee(n));
+        employeeTable.getSelectionModel().selectedItemProperty().addListener((obs, o, n) -> {
+            if (n != null)
+                selectedEmployee = n;
+            loadEmployee(n);
+        });
         statusCombo.setItems(FXCollections.observableArrayList("Active", "Inactive"));
         statusCombo.getSelectionModel().selectFirst();
         shiftBox.setCellFactory(list -> new ListCell<>() {
@@ -154,7 +159,7 @@ public class EmployeeController {
 
     @FXML
     private void onUpdateEmployee() {
-        Employee sel = employeeTable.getSelectionModel().getSelectedItem();
+        Employee sel = selectedEmployee;
         if (sel == null)
             return;
         try {
@@ -192,7 +197,7 @@ public class EmployeeController {
 
     @FXML
     private void onDeleteEmployee() {
-        Employee sel = employeeTable.getSelectionModel().getSelectedItem();
+        Employee sel = selectedEmployee;
         if (sel == null)
             return;
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION, "Delete this employee?", ButtonType.OK,
@@ -209,7 +214,7 @@ public class EmployeeController {
 
     @FXML
     private void onAssignShift() {
-        Employee sel = employeeTable.getSelectionModel().getSelectedItem();
+        Employee sel = selectedEmployee;
         if (sel == null)
             return;
         Shift chosen = shiftBox.getValue();
@@ -242,7 +247,7 @@ public class EmployeeController {
 
     @FXML
     private void onSave() {
-        Employee sel = employeeTable.getSelectionModel().getSelectedItem();
+        Employee sel = selectedEmployee;
         if (sel == null) {
             onAddEmployee();
         } else {
@@ -252,6 +257,7 @@ public class EmployeeController {
 
     @FXML
     private void onClearForm() {
+        selectedEmployee = null;
         employeeTable.getSelectionModel().clearSelection();
         nameField.clear();
         branchField.clear();
@@ -340,7 +346,6 @@ public class EmployeeController {
         }
         Shift chosen = shiftBox.getSelectionModel().getSelectedItem();
         target.setShiftId(chosen == null ? null : chosen.getId());
-        target.setUserId(null);
         return target;
     }
 

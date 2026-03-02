@@ -46,6 +46,7 @@ public class InventoryController {
     private final InventoryService inventoryService = new InventoryService();
     private static final DateTimeFormatter DT_FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     private boolean showLowStockOnly = false;
+    private InventoryItem selectedItem = null;
 
     @FXML
     public void initialize() {
@@ -83,7 +84,12 @@ public class InventoryController {
         colUpdated.setCellValueFactory(c -> new SimpleStringProperty(
                 c.getValue().getLastUpdated() != null ? c.getValue().getLastUpdated().format(DT_FMT) : ""));
 
-        inventoryTable.getSelectionModel().selectedItemProperty().addListener((obs, o, n) -> loadItem(n));
+        inventoryTable.getSelectionModel().selectedItemProperty().addListener((obs, o, n) -> {
+            if (n != null) {
+                selectedItem = n;
+            }
+            loadItem(n);
+        });
     }
 
     private void refresh() {
@@ -94,7 +100,18 @@ public class InventoryController {
             } else {
                 items = inventoryService.listInventory();
             }
+            InventoryItem prev = selectedItem;
             inventoryTable.setItems(FXCollections.observableArrayList(items));
+            // Re-select the same item by id after refresh
+            if (prev != null) {
+                for (InventoryItem it : items) {
+                    if (it.getId() == prev.getId()) {
+                        selectedItem = it;
+                        inventoryTable.getSelectionModel().select(it);
+                        break;
+                    }
+                }
+            }
         } catch (SQLException e) {
             showError("Inventory load failed: " + e.getMessage());
         }
@@ -121,6 +138,7 @@ public class InventoryController {
 
     @FXML
     private void onAdd() {
+        selectedItem = null;
         inventoryTable.getSelectionModel().clearSelection();
         String name = nameField.getText();
         String unit = unitField.getText();
@@ -143,7 +161,7 @@ public class InventoryController {
 
     @FXML
     private void onUpdateAction() {
-        InventoryItem sel = inventoryTable.getSelectionModel().getSelectedItem();
+        InventoryItem sel = selectedItem;
         if (sel == null) {
             showError("Select an item to update.");
             return;
@@ -172,7 +190,7 @@ public class InventoryController {
 
     @FXML
     private void onDelete() {
-        InventoryItem sel = inventoryTable.getSelectionModel().getSelectedItem();
+        InventoryItem sel = selectedItem;
         if (sel == null)
             return;
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION,
@@ -191,6 +209,7 @@ public class InventoryController {
 
     @FXML
     private void onClear() {
+        selectedItem = null;
         inventoryTable.getSelectionModel().clearSelection();
         nameField.clear();
         unitField.clear();

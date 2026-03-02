@@ -127,9 +127,9 @@ public class UserManagementController {
     }
 
     private void onSelected(User u) {
-        selectedUser = u;
         if (u == null)
             return;
+        selectedUser = u;
         usernameField.setText(u.getUsername());
         fullNameField.setText(u.getFullName() != null ? u.getFullName() : "");
         emailField.setText(u.getEmail() != null ? u.getEmail() : "");
@@ -150,11 +150,16 @@ public class UserManagementController {
             loadUsers();
             return;
         }
-        userList.setAll(userList.stream()
-                .filter(u -> (u.getUsername() != null && u.getUsername().toLowerCase().contains(q))
-                        || (u.getFullName() != null && u.getFullName().toLowerCase().contains(q))
-                        || (u.getEmail() != null && u.getEmail().toLowerCase().contains(q)))
-                .collect(Collectors.toList()));
+        try {
+            List<User> allUsers = userDao.findAll();
+            userList.setAll(allUsers.stream()
+                    .filter(u -> (u.getUsername() != null && u.getUsername().toLowerCase().contains(q))
+                            || (u.getFullName() != null && u.getFullName().toLowerCase().contains(q))
+                            || (u.getEmail() != null && u.getEmail().toLowerCase().contains(q)))
+                    .collect(Collectors.toList()));
+        } catch (SQLException e) {
+            showAlert("Search error: " + e.getMessage());
+        }
     }
 
     @FXML

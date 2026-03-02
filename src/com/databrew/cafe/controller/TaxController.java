@@ -28,13 +28,18 @@ public class TaxController {
     private TextField rateField;
 
     private final TaxDao taxDao = new TaxDao();
+    private Tax selectedItem = null;
 
     @FXML
     public void initialize() {
         colId.setCellValueFactory(c -> new SimpleLongProperty(c.getValue().getId()));
         colName.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getName()));
         colRate.setCellValueFactory(c -> new SimpleDoubleProperty(c.getValue().getRate()));
-        taxTable.getSelectionModel().selectedItemProperty().addListener((obs, o, n) -> loadItem(n));
+        taxTable.getSelectionModel().selectedItemProperty().addListener((obs, o, n) -> {
+            if (n != null)
+                selectedItem = n;
+            loadItem(n);
+        });
         refresh();
     }
 
@@ -55,7 +60,7 @@ public class TaxController {
 
     @FXML
     private void onSave() {
-        Tax sel = taxTable.getSelectionModel().getSelectedItem();
+        Tax sel = selectedItem;
         if (sel == null) {
             onAdd();
         } else {
@@ -65,6 +70,7 @@ public class TaxController {
 
     @FXML
     private void onAdd() {
+        selectedItem = null;
         taxTable.getSelectionModel().clearSelection();
         if (nameField.getText() == null || nameField.getText().isBlank()) {
             showError("Tax name is required.");
@@ -86,7 +92,7 @@ public class TaxController {
 
     @FXML
     private void onUpdateAction() {
-        Tax sel = taxTable.getSelectionModel().getSelectedItem();
+        Tax sel = selectedItem;
         if (sel == null) {
             showError("Select a tax to update.");
             return;
@@ -113,7 +119,7 @@ public class TaxController {
 
     @FXML
     private void onDelete() {
-        Tax sel = taxTable.getSelectionModel().getSelectedItem();
+        Tax sel = selectedItem;
         if (sel == null)
             return;
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION, "Delete tax \"" + sel.getName() + "\"?", ButtonType.OK,
@@ -131,6 +137,7 @@ public class TaxController {
 
     @FXML
     private void onClear() {
+        selectedItem = null;
         taxTable.getSelectionModel().clearSelection();
         nameField.clear();
         rateField.clear();

@@ -35,6 +35,7 @@ public class SupplierController {
     private TextField emailField;
 
     private final SupplierDao supplierDao = new SupplierDao();
+    private Supplier selectedItem = null;
 
     @FXML
     public void initialize() {
@@ -43,7 +44,11 @@ public class SupplierController {
         colContact.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getContact()));
         colPhone.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getPhone()));
         colEmail.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getEmail()));
-        supplierTable.getSelectionModel().selectedItemProperty().addListener((obs, o, n) -> loadItem(n));
+        supplierTable.getSelectionModel().selectedItemProperty().addListener((obs, o, n) -> {
+            if (n != null)
+                selectedItem = n;
+            loadItem(n);
+        });
         refresh();
     }
 
@@ -66,7 +71,7 @@ public class SupplierController {
 
     @FXML
     private void onSave() {
-        Supplier sel = supplierTable.getSelectionModel().getSelectedItem();
+        Supplier sel = selectedItem;
         if (sel == null) {
             onAdd();
         } else {
@@ -76,6 +81,7 @@ public class SupplierController {
 
     @FXML
     private void onAdd() {
+        selectedItem = null;
         supplierTable.getSelectionModel().clearSelection();
         if (nameField.getText() == null || nameField.getText().isBlank()) {
             showError("Supplier name is required.");
@@ -97,7 +103,7 @@ public class SupplierController {
 
     @FXML
     private void onUpdateAction() {
-        Supplier sel = supplierTable.getSelectionModel().getSelectedItem();
+        Supplier sel = selectedItem;
         if (sel == null) {
             showError("Select a supplier to update.");
             return;
@@ -124,7 +130,7 @@ public class SupplierController {
 
     @FXML
     private void onDelete() {
-        Supplier sel = supplierTable.getSelectionModel().getSelectedItem();
+        Supplier sel = selectedItem;
         if (sel == null)
             return;
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION, "Delete supplier \"" + sel.getName() + "\"?",
@@ -142,6 +148,7 @@ public class SupplierController {
 
     @FXML
     private void onClear() {
+        selectedItem = null;
         supplierTable.getSelectionModel().clearSelection();
         nameField.clear();
         contactField.clear();

@@ -54,7 +54,7 @@
           <Button text="Order History" maxWidth="Infinity" onAction="#handleGoToOrderHistory" styleClass="sidebar-btn" />
           <Button text="Reports" maxWidth="Infinity" onAction="#handleGoToReports" styleClass="sidebar-btn" />
           <Button text="Audit Logs" maxWidth="Infinity" onAction="#handleGoToAuditLogs" styleClass="sidebar-btn" />
-          <Button text="User Management" maxWidth="Infinity" onAction="#handleGoToUserManagement" styleClass="sidebar-btn" />
+          <Button fx:id="userMgmtBtn" text="User Management" maxWidth="Infinity" onAction="#handleGoToUserManagement" styleClass="sidebar-btn" />
           <Button text="Shifts &amp; Attendance" maxWidth="Infinity" onAction="#handleGoToShiftManagement" styleClass="sidebar-btn" />
 
           <Pane VBox.vgrow="ALWAYS" />

@@ -191,9 +191,9 @@ public class ShiftManagementController {
     }
 
     private void onShiftSelected(Shift s) {
-        selectedShift = s;
         if (s == null)
             return;
+        selectedShift = s;
         shiftNameField.setText(s.getName());
         shiftStartField.setText(s.getStartTime());
         shiftEndField.setText(s.getEndTime());
