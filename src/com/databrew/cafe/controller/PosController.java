@@ -17,14 +17,18 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 import javafx.geometry.Insets;
@@ -39,14 +43,14 @@ public class PosController {
     private TextField searchField;
     @FXML
     private ComboBox<String> categoryCombo;
+
+    /* Card grid (replaces old menu TableView) */
     @FXML
-    private TableView<MenuItem> menuTable;
+    private FlowPane menuFlowPane;
     @FXML
-    private TableColumn<MenuItem, String> menuNameCol;
+    private ScrollPane menuScrollPane;
     @FXML
-    private TableColumn<MenuItem, Number> menuPriceCol;
-    @FXML
-    private TableColumn<MenuItem, String> menuCategoryCol;
+    private ScrollPane cartScrollPane;
 
     @FXML
     private TableView<OrderItem> cartTable;
@@ -92,12 +96,28 @@ public class PosController {
     private final Map<Long, MenuItem> menuIndex = new HashMap<>();
     private final Map<Long, String> categoryNames = new HashMap<>();
 
+    /* Maps category names to a representative emoji for cards */
+    private static final Map<String, String> CATEGORY_ICONS = new HashMap<>();
+    static {
+        CATEGORY_ICONS.put("coffee", "\u2615"); // ☕
+        CATEGORY_ICONS.put("tea", "\uD83C\uDF75"); // 🍵
+        CATEGORY_ICONS.put("juice", "\uD83E\uDDC3"); // 🧃
+        CATEGORY_ICONS.put("smoothie", "\uD83E\uDD64");// 🥤
+        CATEGORY_ICONS.put("pastry", "\uD83E\uDD50"); // 🥐
+        CATEGORY_ICONS.put("cake", "\uD83C\uDF70"); // 🍰
+        CATEGORY_ICONS.put("sandwich", "\uD83E\uDD6A");// 🥪
+        CATEGORY_ICONS.put("dessert", "\uD83C\uDF69");// 🍩
+        CATEGORY_ICONS.put("snack", "\uD83C\uDF7F"); // 🍿
+        CATEGORY_ICONS.put("breakfast", "\uD83E\uDD5E");// 🥞
+        CATEGORY_ICONS.put("salad", "\uD83E\uDD57"); // 🥗
+        CATEGORY_ICONS.put("beverage", "\uD83C\uDF79");// 🍹
+    }
+
     private List<Discount> discounts;
     private List<Tax> taxes;
 
     @FXML
     public void initialize() {
-        wireMenuTable();
         wireCartTable();
         loadMenuItems();
         loadCategories();
@@ -107,6 +127,13 @@ public class PosController {
         customerTypeCombo.getSelectionModel().selectFirst();
         methodCombo.getSelectionModel().selectFirst();
         cartTable.setItems(cartItems);
+
+        // Bind FlowPane wrap-length to viewport width so scroll works correctly
+        menuScrollPane.viewportBoundsProperty().addListener((obs, oldBounds, newBounds) -> {
+            if (newBounds != null) {
+                menuFlowPane.setPrefWrapLength(newBounds.getWidth());
+            }
+        });
 
         // Recalculate totals when discount or tax selection changes
         discountCombo.getSelectionModel().selectedItemProperty().addListener((o, ov, nv) -> updateTotals());
@@ -123,15 +150,60 @@ public class PosController {
         searchField.textProperty().addListener((o, ov, nv) -> applyFilter());
     }
 
-    private void wireMenuTable() {
-        menuNameCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getName()));
-        menuPriceCol.setCellValueFactory(c -> new SimpleDoubleProperty(c.getValue().getPrice()));
-        menuCategoryCol.setCellValueFactory(c -> {
-            String cat = categoryNames.getOrDefault(c.getValue().getCategoryId(),
-                    "Cat #" + c.getValue().getCategoryId());
-            return new SimpleStringProperty(cat);
-        });
-        menuTable.setItems(filteredMenuItems);
+    /* ---------- Card grid helpers ---------- */
+
+    /** Build / rebuild the menu card grid from filteredMenuItems. */
+    private void buildMenuCards() {
+        menuFlowPane.getChildren().clear();
+        for (MenuItem item : filteredMenuItems) {
+            menuFlowPane.getChildren().add(createMenuCard(item));
+        }
+    }
+
+    /** Create a single item card (VBox). */
+    private VBox createMenuCard(MenuItem item) {
+        VBox card = new VBox(6);
+        card.getStyleClass().add("pos-menu-card");
+        card.setAlignment(Pos.CENTER);
+
+        // 60×60 image placeholder with emoji icon
+        StackPane imgHolder = new StackPane();
+        imgHolder.getStyleClass().add("pos-card-image");
+        Label icon = new Label(iconForCategory(item.getCategoryId()));
+        icon.getStyleClass().add("pos-card-image-icon");
+        imgHolder.getChildren().add(icon);
+
+        // Item name
+        Label name = new Label(item.getName());
+        name.getStyleClass().add("pos-card-name");
+        name.setWrapText(true);
+        name.setMaxWidth(160);
+
+        // Category tag
+        String catName = categoryNames.getOrDefault(item.getCategoryId(), "");
+        Label catLabel = new Label(catName);
+        catLabel.getStyleClass().add("pos-card-category");
+
+        // Price
+        Label price = new Label(String.format("$%.2f", item.getPrice()));
+        price.getStyleClass().add("pos-card-price");
+
+        card.getChildren().addAll(imgHolder, name, catLabel, price);
+
+        // Click → add to cart
+        card.setOnMouseClicked(e -> addToCart(item));
+        return card;
+    }
+
+    /** Resolve a category id to an emoji icon. */
+    private String iconForCategory(long categoryId) {
+        String catName = categoryNames.getOrDefault(categoryId, "").toLowerCase();
+        for (Map.Entry<String, String> entry : CATEGORY_ICONS.entrySet()) {
+            if (catName.contains(entry.getKey())) {
+                return entry.getValue();
+            }
+        }
+        return "\uD83C\uDF7D"; // 🍽 default plate
     }
 
     private void wireCartTable() {
@@ -152,6 +224,7 @@ public class PosController {
             menuIndex.clear();
             for (MenuItem item : items)
                 menuIndex.put(item.getId(), item);
+            buildMenuCards();
         } catch (SQLException e) {
             alert(Alert.AlertType.ERROR, "Menu load failed: " + e.getMessage());
         }
@@ -218,15 +291,12 @@ public class PosController {
                     (item.getDescription() != null && item.getDescription().toLowerCase().contains(term));
             return matchCat && matchSearch;
         }));
+        buildMenuCards();
     }
 
-    @FXML
-    public void onAdd() {
-        MenuItem selected = menuTable.getSelectionModel().getSelectedItem();
-        if (selected == null)
-            return;
-
-        // Check if already in cart - increment quantity
+    /** Called when a menu card is clicked — adds the item to cart. */
+    private void addToCart(MenuItem selected) {
+        // Check if already in cart — increment quantity
         for (OrderItem oi : cartItems) {
             if (oi.getMenuItemId() == selected.getId()) {
                 oi.setQuantity(oi.getQuantity() + 1);

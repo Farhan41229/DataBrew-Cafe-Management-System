@@ -111,3 +111,368 @@
 
 .dashboard-welcome { -fx-font-size: 30px; -fx-text-fill: #e2e8f0; -fx-font-family: "Pacifico", "Segoe Script", "Brush Script MT", cursive; }
 .dashboard-subtext { -fx-font-size: 16px; -fx-text-fill: #cbd5e1; }
+
+/* ================================================================
+   POS REDESIGN — Cards, Glassmorphism, Modern Typography
+   ================================================================ */
+
+/* Root container */
+.pos-root {
+    -fx-background-color: linear-gradient(to bottom right, #f0f4f8, #dbeafe);
+    -fx-font-family: "Segoe UI", "Inter", "Montserrat", sans-serif;
+}
+
+/* ---- LEFT: Menu Panel ---- */
+.pos-menu-panel {
+    -fx-background-color: transparent;
+}
+
+.pos-menu-header {
+    -fx-padding: 0 0 12 0;
+}
+
+/* Category combo (top-left) */
+.pos-category-combo {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #cbd5e1;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+    -fx-padding: 6 14;
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #0f172a;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 6, 0.15, 0, 2);
+    -fx-cursor: hand;
+}
+.pos-category-combo:focused {
+    -fx-border-color: #3b82f6;
+    -fx-effect: dropshadow(gaussian, rgba(59,130,246,0.3), 10, 0.2, 0, 2);
+}
+.pos-category-combo .arrow-button { -fx-background-color: transparent; }
+
+/* Search field (top-right) */
+.pos-search-field {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #cbd5e1;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+    -fx-padding: 8 16;
+    -fx-font-size: 14px;
+    -fx-text-fill: #0f172a;
+    -fx-prompt-text-fill: #94a3b8;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 6, 0.15, 0, 2);
+}
+.pos-search-field:focused {
+    -fx-border-color: #3b82f6;
+    -fx-effect: dropshadow(gaussian, rgba(59,130,246,0.3), 10, 0.2, 0, 2);
+}
+
+/* ScrollPane for card grid */
+.pos-menu-scroll {
+    -fx-background: transparent;
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+.pos-menu-scroll .viewport {
+    -fx-background-color: transparent;
+}
+.pos-menu-scroll .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-pref-width: 8px;
+}
+.pos-menu-scroll .scroll-bar:vertical .thumb {
+    -fx-background-color: #94a3b8;
+    -fx-background-radius: 4;
+}
+.pos-menu-scroll .scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #64748b;
+}
+.pos-menu-scroll .scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+}
+.pos-menu-scroll .scroll-bar:vertical .increment-button,
+.pos-menu-scroll .scroll-bar:vertical .decrement-button {
+    -fx-pref-height: 0; -fx-padding: 0;
+}
+.pos-menu-scroll .scroll-bar:vertical .increment-arrow,
+.pos-menu-scroll .scroll-bar:vertical .decrement-arrow {
+    -fx-shape: " "; -fx-padding: 0;
+}
+
+/* FlowPane grid */
+.pos-menu-flow {
+    -fx-background-color: transparent;
+}
+
+/* ---- Menu Item Cards ---- */
+.pos-menu-card {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 14;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 14;
+    -fx-border-width: 1;
+    -fx-padding: 14;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0.18, 0, 3);
+    -fx-cursor: hand;
+    -fx-pref-width: 180;
+    -fx-pref-height: 160;
+    -fx-alignment: CENTER;
+}
+.pos-menu-card:hover {
+    -fx-border-color: #3b82f6;
+    -fx-effect: dropshadow(gaussian, rgba(59,130,246,0.25), 14, 0.25, 0, 4);
+}
+.pos-menu-card-selected {
+    -fx-border-color: #2563eb;
+    -fx-border-width: 2.5;
+    -fx-effect: dropshadow(gaussian, rgba(37,99,235,0.35), 14, 0.3, 0, 3);
+}
+
+.pos-card-image {
+    -fx-background-color: linear-gradient(to bottom right, #e0f2fe, #dbeafe);
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: #bfdbfe;
+    -fx-border-width: 1;
+    -fx-min-width: 60;
+    -fx-min-height: 60;
+    -fx-pref-width: 60;
+    -fx-pref-height: 60;
+    -fx-alignment: CENTER;
+}
+.pos-card-image-icon {
+    -fx-font-size: 26px;
+    -fx-text-fill: #3b82f6;
+    -fx-font-weight: 900;
+}
+
+.pos-card-name {
+    -fx-font-size: 14px;
+    -fx-font-weight: 800;
+    -fx-text-fill: #0f172a;
+    -fx-wrap-text: true;
+    -fx-text-alignment: center;
+    -fx-alignment: CENTER;
+}
+
+.pos-card-category {
+    -fx-font-size: 11px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #64748b;
+    -fx-alignment: CENTER;
+}
+
+.pos-card-price {
+    -fx-font-size: 16px;
+    -fx-font-weight: 900;
+    -fx-text-fill: #059669;
+    -fx-alignment: CENTER;
+}
+
+/* ---- RIGHT: Cart Panel (Glassmorphism) ---- */
+
+/* CartScrollPane wrapper — transparent so glassmorphism shows through */
+.pos-cart-scroll {
+    -fx-background: transparent;
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+.pos-cart-scroll .viewport {
+    -fx-background-color: transparent;
+}
+.pos-cart-scroll .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-pref-width: 8px;
+}
+.pos-cart-scroll .scroll-bar:vertical .thumb {
+    -fx-background-color: #94a3b8;
+    -fx-background-radius: 4;
+}
+.pos-cart-scroll .scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #64748b;
+}
+.pos-cart-scroll .scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+}
+.pos-cart-scroll .scroll-bar:vertical .increment-button,
+.pos-cart-scroll .scroll-bar:vertical .decrement-button {
+    -fx-pref-height: 0; -fx-padding: 0;
+}
+.pos-cart-scroll .scroll-bar:vertical .increment-arrow,
+.pos-cart-scroll .scroll-bar:vertical .decrement-arrow {
+    -fx-shape: " "; -fx-padding: 0;
+}
+
+.pos-cart-panel {
+    -fx-background-color: rgba(255, 255, 255, 0.55);
+    -fx-background-radius: 20 0 0 20;
+    -fx-border-color: rgba(255, 255, 255, 0.65);
+    -fx-border-radius: 20 0 0 20;
+    -fx-border-width: 1 0 1 1;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.12), 20, 0.15, -4, 0);
+}
+
+.pos-cart-title {
+    -fx-font-size: 26px;
+    -fx-font-weight: 900;
+    -fx-text-fill: #0f172a;
+    -fx-padding: 0 0 4 0;
+}
+
+/* Cart form */
+.pos-cart-form {
+    -fx-background-color: rgba(248, 250, 252, 0.7);
+    -fx-background-radius: 12;
+    -fx-border-color: rgba(226, 232, 240, 0.6);
+    -fx-border-radius: 12;
+    -fx-padding: 12;
+}
+.pos-cart-label {
+    -fx-font-size: 13px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #334155;
+}
+.pos-cart-field {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #0f172a;
+    -fx-prompt-text-fill: #94a3b8;
+    -fx-padding: 8 10;
+    -fx-background-radius: 10;
+    -fx-border-color: #cbd5e1;
+    -fx-border-radius: 10;
+    -fx-border-width: 1;
+    -fx-font-size: 13px;
+}
+.pos-cart-field:focused {
+    -fx-border-color: #3b82f6;
+    -fx-effect: dropshadow(gaussian, rgba(59,130,246,0.22), 8, 0.2, 0, 1);
+}
+.pos-cart-field .arrow-button { -fx-background-color: transparent; }
+
+/* Cart table */
+.pos-cart-table {
+    -fx-background-color: rgba(255,255,255,0.75);
+    -fx-border-color: rgba(226,232,240,0.5);
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+    -fx-padding: 4;
+}
+.pos-cart-table .column-header-background {
+    -fx-background-color: rgba(241, 245, 249, 0.85);
+    -fx-background-radius: 12 12 0 0;
+    -fx-padding: 8 6;
+}
+.pos-cart-table .column-header .label {
+    -fx-text-fill: #0f172a;
+    -fx-font-weight: 800;
+    -fx-font-size: 12px;
+}
+.pos-cart-table .table-row-cell {
+    -fx-background-color: transparent;
+    -fx-border-color: rgba(226,232,240,0.4);
+}
+.pos-cart-table .table-row-cell:odd {
+    -fx-background-color: rgba(248,250,252,0.5);
+}
+.pos-cart-table .table-row-cell:selected {
+    -fx-background-color: rgba(219, 234, 254, 0.7);
+    -fx-text-fill: #0f172a;
+}
+.pos-cart-table .table-cell {
+    -fx-text-fill: #0f172a;
+    -fx-font-size: 12px;
+    -fx-padding: 8 6;
+}
+.pos-cart-table .filler {
+    -fx-background-color: transparent;
+}
+
+.pos-cart-empty {
+    -fx-font-size: 16px;
+    -fx-text-fill: #94a3b8;
+    -fx-font-weight: 600;
+}
+
+/* Cart action buttons */
+.pos-cart-actions {
+    -fx-padding: 2 0;
+}
+.pos-btn-action {
+    -fx-padding: 8 6;
+    -fx-font-size: 13px;
+    -fx-font-weight: 800;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-cursor: hand;
+}
+.pos-btn-plus {
+    -fx-background-color: #3b82f6;
+    -fx-text-fill: white;
+}
+.pos-btn-plus:hover { -fx-background-color: #2563eb; }
+.pos-btn-minus {
+    -fx-background-color: #e2e8f0;
+    -fx-text-fill: #0f172a;
+}
+.pos-btn-minus:hover { -fx-background-color: #cbd5e1; }
+.pos-btn-remove {
+    -fx-background-color: #ef4444;
+    -fx-text-fill: white;
+}
+.pos-btn-remove:hover { -fx-background-color: #dc2626; }
+.pos-btn-clear {
+    -fx-background-color: #e2e8f0;
+    -fx-text-fill: #374151;
+}
+.pos-btn-clear:hover { -fx-background-color: #cbd5e1; }
+
+/* Totals box */
+.pos-totals-box {
+    -fx-background-color: rgba(240, 253, 244, 0.7);
+    -fx-background-radius: 12;
+    -fx-border-color: rgba(167, 243, 208, 0.5);
+    -fx-border-radius: 12;
+    -fx-padding: 12;
+}
+.pos-totals-label {
+    -fx-font-size: 13px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #374151;
+}
+.pos-totals-value {
+    -fx-font-size: 13px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #374151;
+}
+.pos-discount-text { -fx-text-fill: #dc2626; }
+.pos-tax-text { -fx-text-fill: #2563eb; }
+.pos-total-big-label {
+    -fx-font-size: 22px;
+    -fx-font-weight: 900;
+    -fx-text-fill: #059669;
+}
+.pos-total-big-value {
+    -fx-font-size: 24px;
+    -fx-font-weight: 900;
+    -fx-text-fill: #059669;
+}
+
+/* ---- CHECKOUT BUTTON (most prominent) ---- */
+.pos-checkout-btn {
+    -fx-background-color: linear-gradient(to right, #22c55e, #16a34a, #15803d);
+    -fx-text-fill: white;
+    -fx-font-size: 20px;
+    -fx-font-weight: 900;
+    -fx-padding: 18 24;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(22,163,74,0.45), 16, 0.3, 0, 4);
+}
+.pos-checkout-btn:hover {
+    -fx-background-color: linear-gradient(to right, #16a34a, #15803d, #166534);
+    -fx-effect: dropshadow(gaussian, rgba(22,163,74,0.6), 20, 0.35, 0, 5);
+}
+.pos-checkout-btn:pressed {
+    -fx-background-color: linear-gradient(to right, #15803d, #166534, #14532d);
+}
